@@ -15,14 +15,14 @@
 4. 修改文件管理右上角内存显示方式及单位进制
 ## 修改教程
 1. 同 局域网下/wifi ，进行操作
-2. 下载项目文件**GCSBS.html**和**manager.htm**
+2. 下载项目文件**GCSBS.html**和**manager.htm**（没错就是htm没有l）
 3. 打开设备，进入升级/APP，选择电脑传书
 4. 手机或浏览器进入最后一行显示的ip
 5. 点击更多设置，将SD卡启用切换到SD卡停用
 6. 返回进入文件管理
 7. 选择文件**GCSBS.html**，修改上方输入框，填写/system/GCSBS.html
 8. 点击上传
-9. 选择文件**manager.htm**，修改上方输入框，填写/system/manager.htm
+9. 选择文件**manager.htm**（没错就是htm没有l），修改上方输入框，填写/system/manager.htm（没错就是htm没有l）
 10. 点击上传
 ## 预览
 <img width="1451" height="766" alt="image" src="https://github.com/user-attachments/assets/ca8e2027-6ee3-401a-a0eb-e6a75fdadf5d" />

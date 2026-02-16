@@ -1,0 +1,1596 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link rel="stylesheet" type="text/css" href="system\bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="system\toast.css" />
+    <script src="system\jquery.js"></script>
+    <script src="system\bootstrapBundle.js"></script>
+    <script src="system\toast.js"></script>
+    <script src="system\lan\index.js"></script>
+    <title>XTeink</title>
+    <style>
+      :root {
+        --primary-bg: #0a0e17;
+        --secondary-bg: #111827;
+        --card-bg: #1a2234;
+        --accent-cyan: #00d4ff;
+        --accent-magenta: #ff006e;
+        --accent-green: #00ff88;
+        --accent-orange: #ff6b35;
+        --text-primary: #f0f4f8;
+        --text-secondary: #94a3b8;
+        --border-color: #2d3748;
+        --glow-cyan: 0 0 20px rgba(0, 212, 255, 0.5);
+        --glow-magenta: 0 0 20px rgba(255, 0, 110, 0.5);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        background: var(--primary-bg);
+        color: var(--text-primary);
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+          linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+        background-size: 50px 50px;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(ellipse at top, rgba(0, 212, 255, 0.08) 0%, transparent 60%);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .container {
+        position: relative;
+        z-index: 1;
+        padding: 20px 15px;
+        max-width: 900px;
+      }
+
+      h2 {
+        font-family: 'Arial Black', 'Impact', sans-serif;
+        font-weight: 900;
+        font-size: 2rem;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 20px;
+        background: linear-gradient(135deg, var(--accent-cyan), var(--accent-magenta));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: var(--glow-cyan);
+        position: relative;
+        display: inline-block;
+      }
+
+      h2::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent-cyan), var(--accent-magenta));
+        box-shadow: var(--glow-cyan);
+      }
+
+      h2 small {
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        letter-spacing: 1px;
+        -webkit-text-fill-color: var(--text-secondary);
+        text-shadow: none;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        font-family: 'Arial Black', 'Impact', sans-serif;
+        font-weight: 700;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--accent-cyan);
+        margin-bottom: 8px;
+        display: block;
+      }
+
+      .form-control,
+      select.form-control {
+        background: var(--card-bg);
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        color: var(--text-primary);
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-size: 0.9rem;
+        padding: 10px 14px;
+        min-height: 40px;
+        line-height: 1.4;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      select.form-control {
+        padding-right: 35px;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2300d4ff' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+      }
+
+      select.form-control option {
+        background: var(--card-bg);
+        color: var(--text-primary);
+        padding: 10px;
+        white-space: normal;
+      }
+
+      .form-control:focus,
+      select.form-control:focus {
+        background: var(--secondary-bg);
+        border-color: var(--accent-cyan);
+        box-shadow: var(--glow-cyan);
+        outline: none;
+      }
+
+      .form-control::placeholder {
+        color: var(--text-secondary);
+      }
+
+      .btn {
+        font-family: 'Arial Black', 'Impact', sans-serif;
+        font-weight: 700;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: none;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+      }
+
+      .btn:hover::before {
+        left: 100%;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent-cyan), #00a8cc);
+        color: var(--primary-bg);
+        box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--glow-cyan);
+      }
+
+      .btn-success {
+        background: linear-gradient(135deg, var(--accent-green), #00cc6a);
+        color: var(--primary-bg);
+        box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+      }
+
+      .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 25px rgba(0, 255, 136, 0.5);
+      }
+
+      .btn-secondary {
+        background: var(--card-bg);
+        color: var(--text-primary);
+        border: 2px solid var(--border-color);
+      }
+
+      .btn-secondary:hover {
+        background: var(--secondary-bg);
+        border-color: var(--accent-magenta);
+        box-shadow: var(--glow-magenta);
+      }
+
+      .btn-info {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-info:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 25px rgba(102, 126, 234, 0.5);
+      }
+
+      .btn-danger {
+        background: linear-gradient(135deg, var(--accent-magenta), #d6005c);
+        color: white;
+        box-shadow: 0 4px 15px rgba(255, 0, 110, 0.3);
+      }
+
+      .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--glow-magenta);
+      }
+
+      .btn-sm {
+        padding: 8px 18px;
+        font-size: 0.75rem;
+      }
+
+      hr {
+        border: none;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+        margin: 25px 0;
+      }
+
+      .input-group-text {
+        background: var(--card-bg);
+        border: 2px solid var(--border-color);
+        border-radius: 8px 0 0 8px;
+        color: var(--accent-cyan);
+        font-family: 'Arial Black', 'Impact', sans-serif;
+        font-weight: 700;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .input-group .form-control {
+        border-radius: 0 8px 8px 0;
+      }
+
+      .input-group-prepend {
+        margin-right: 0;
+      }
+
+      .modal-content {
+        background: var(--card-bg);
+        border: 2px solid var(--border-color);
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        z-index: 1060 !important;
+        position: relative;
+      }
+
+      .modal-backdrop {
+        background-color: transparent !important;
+        z-index: 1040 !important;
+        pointer-events: none !important;
+      }
+
+      .modal-backdrop.show {
+        pointer-events: none !important;
+      }
+
+      .modal {
+        z-index: 1050 !important;
+      }
+
+      .modal-dialog {
+        pointer-events: auto !important;
+        z-index: 1051 !important;
+      }
+
+      .modal-header {
+        border-bottom: 2px solid var(--border-color);
+        padding: 15px 20px;
+      }
+
+      .modal-title {
+        font-family: 'Arial Black', 'Impact', sans-serif;
+        font-weight: 700;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--accent-cyan);
+      }
+
+      .modal-title small {
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+      }
+
+      .modal-body {
+        padding: 20px;
+        color: var(--text-primary);
+        font-size: 0.9rem;
+        line-height: 1.6;
+        max-height: 70vh;
+        overflow-y: auto;
+      }
+
+      .modal-body input,
+      .modal-body select,
+      .modal-body button,
+      .modal-body a,
+      .modal-body .form-control,
+      .modal-body .btn,
+      .modal-body .input-group,
+      .modal-body .input-group-text,
+      .modal-body .form-group {
+        position: relative;
+        z-index: 1061;
+      }
+
+      .modal-footer {
+        border-top: 2px solid var(--border-color);
+        padding: 15px 20px;
+      }
+
+      .modal-footer button,
+      .modal-footer a {
+        position: relative;
+        z-index: 1061;
+      }
+
+      .modal-header button {
+        position: relative;
+        z-index: 1061;
+      }
+
+      .close {
+        color: var(--text-secondary);
+        font-size: 2rem;
+        opacity: 0.7;
+        transition: all 0.3s ease;
+      }
+
+      .close:hover {
+        color: var(--accent-magenta);
+        opacity: 1;
+      }
+
+      .progress {
+        background: var(--secondary-bg);
+        border-radius: 10px;
+        height: 30px;
+        border: 2px solid var(--border-color);
+      }
+
+      .progress-bar {
+        background: linear-gradient(90deg, var(--accent-cyan), var(--accent-magenta));
+        border-radius: 8px;
+        font-family: 'Arial Black', 'Impact', sans-serif;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      }
+
+      .alert {
+        border-radius: 10px;
+        border: none;
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-size: 0.9rem;
+      }
+
+      .alert-warning {
+        background: rgba(255, 107, 53, 0.15);
+        color: var(--accent-orange);
+        border: 1px solid rgba(255, 107, 53, 0.3);
+      }
+
+      .alert-success {
+        background: rgba(0, 255, 136, 0.15);
+        color: var(--accent-green);
+        border: 1px solid rgba(0, 255, 136, 0.3);
+      }
+
+      .collapse,
+      .collapse.show,
+      .collapse.collapsing,
+      .collapse:not(.show),
+      .collapse.in,
+      .collapse.in.collapsing,
+      .collapse:not(.in),
+      div[id^="sd"],
+      div[id^="longPress"],
+      div[id^="zd"] {
+        background: transparent !important;
+        border-radius: 0 !important;
+        padding: 8px 0 !important;
+        margin-top: 8px !important;
+        border: none !important;
+        overflow: visible !important;
+        display: none !important;
+        color: var(--text-secondary) !important;
+        font-size: 0.85rem !important;
+        line-height: 1.5 !important;
+        height: auto !important;
+        max-height: none !important;
+        min-height: auto !important;
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        position: static !important;
+        width: auto !important;
+      }
+
+      .collapse.show,
+      .collapse.in,
+      div[id^="sd"].show,
+      div[id^="longPress"].show,
+      div[id^="zd"].show {
+        display: block !important;
+      }
+
+      .collapse.collapsing,
+      .collapse.in.collapsing,
+      div[id^="sd"].collapsing,
+      div[id^="longPress"].collapsing,
+      div[id^="zd"].collapsing {
+        display: block !important;
+        height: auto !important;
+        position: static !important;
+      }
+
+      [data-toggle="collapse"] {
+        cursor: pointer;
+      }
+
+      .collapse.show,
+      .collapse.collapsing,
+      .collapse.in,
+      .collapse.in.collapsing,
+      .collapse.show > *,
+      .collapse.collapsing > *,
+      .collapse.in > *,
+      .collapse.in.collapsing > *,
+      div[id^="sd"].show > *,
+      div[id^="longPress"].show > *,
+      div[id^="zd"].show > * {
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+      }
+
+      .collapse.collapsing {
+        position: static !important;
+      }
+
+      .collapse.show,
+      .collapse.in,
+      .collapse.collapsing,
+      .collapse.in.collapsing {
+        -webkit-transition: none !important;
+        -moz-transition: none !important;
+        -ms-transition: none !important;
+        -o-transition: none !important;
+        transition: none !important;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes pulse {
+        0%, 100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      .container > * {
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      .container > *:nth-child(1) { animation-delay: 0.1s; }
+      .container > *:nth-child(2) { animation-delay: 0.2s; }
+      .container > *:nth-child(3) { animation-delay: 0.3s; }
+      .container > *:nth-child(4) { animation-delay: 0.4s; }
+      .container > *:nth-child(5) { animation-delay: 0.5s; }
+
+      #my_staNameIp {
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--secondary-bg);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, var(--accent-cyan), var(--accent-magenta));
+        border-radius: 5px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, var(--accent-magenta), var(--accent-cyan));
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 15px 10px;
+        }
+
+        h2 {
+          font-size: 1.5rem;
+          margin-bottom: 15px;
+        }
+
+        .form-group {
+          margin-bottom: 12px;
+        }
+
+        .form-group label {
+          font-size: 0.7rem;
+          margin-bottom: 6px;
+        }
+
+        .form-control,
+        select.form-control {
+          font-size: 0.85rem;
+          padding: 8px 12px;
+          min-height: 36px;
+        }
+
+        .btn {
+          font-size: 0.7rem;
+          padding: 8px 16px;
+        }
+
+        hr {
+          margin: 20px 0;
+        }
+
+        .modal-header {
+          padding: 12px 15px;
+        }
+
+        .modal-title {
+          font-size: 1rem;
+        }
+
+        .modal-body {
+          padding: 15px;
+          font-size: 0.85rem;
+        }
+
+        .modal-footer {
+          padding: 12px 15px;
+        }
+
+        .btn-sm {
+          padding: 6px 12px;
+          font-size: 0.65rem;
+        }
+      }
+    </style>
+  </head>
+  <body onload="getData1()">
+    <div class="container">
+      <h2>
+        <span language="wifi_peizhi">WIFI配置</span>&nbsp;
+        <small style="font-size: 0.9rem">
+          <span id="my_staNameIp" language="huoquzhong">
+            获取中…<!--返回STA名称和ip-->
+          </span>
+        </small>
+      </h2>
+
+      <div class="form-group" id="language_select">
+        <label for="language_select">
+          <span language="xuanzeyuyan">语言</span>:
+        </label>
+        <select class="form-control"></select>
+      </div>
+
+      <form id="form_wifi" target="iframe_wifi">
+        <div class="form-group" id="wifi_type">
+          <label for="sel1">
+            <span language="zhoubianwangluo">周边网络</span>:
+          </label>
+          <select class="form-control" id="sel1">
+            <option>
+              <span language="notScanned">未扫描</span>
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="password">
+            <span language="wifi_mima">WIFI密码</span>:
+          </label>
+          <input
+            language-placeholder="qingshuru"
+            type="text"
+            class="form-control"
+            name="password"
+            autocomplete="off"
+            placeholder="请输入"
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary" onclick="tjxx_wifi()">
+          <span language="baocun">保存</span>
+        </button>
+        <button type="button" class="btn btn-success" onclick="scan_wifi()">
+          <span language="saomiao">扫描</span>
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          onclick="scanWifiHistory()"
+        >
+          <span language="lishi">历史</span>
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="manual_wifi()">
+          <span language="shoudong">手动</span>
+        </button>
+        <span id="my_wifiReturnFormInfo">
+          <!-- 按下保存按钮后服务器返回的消息提示 -->
+        </span>
+      </form>
+
+      <iframe name="iframe_wifi" style="display: none"></iframe>
+      <!-- 不跳转页面 -->
+
+      <br />
+      <hr />
+
+      <!-- 按钮：用于打开固件更新模态框 -->
+      <button
+        type="button"
+        class="btn btn-success"
+        data-toggle="modal"
+        data-target="#Modal_updata"
+        style="margin: 0.3% 0% 0.5% 0.3%"
+        onclick="get_updateAddress()"
+      >
+        <span language="gujiangenxin">固件更新</span>
+      </button>
+      <!-- 按钮：用于打开上传文件模态框 -->
+      <!--<button type="button" class="btn btn-success" data-toggle="modal" data-target="#Modal_fileUpdata" style='margin:0.5% 0% 1% 0.5%' onclick='get_file_upload()'>
+			快捷上传
+		</button>-->
+      <!-- 按钮：用于打开文件管理模态框 -->
+      <button
+        type="button"
+        class="btn btn-success"
+        data-toggle="modal"
+        data-target="#Modal_fileManagement"
+        style="margin: 0.3% 0% 0.5% 0.3%"
+      >
+        <span language="wenjianguanli">文件管理</span>
+      </button>
+      <!-- 按钮：用于打开更多设置模态框 -->
+      <button
+        type="button"
+        class="btn btn-success"
+        data-toggle="modal"
+        data-target="#Modal_moreSet"
+        style="margin: 0.3% 0% 0.5% 0.3%"
+        onclick="get_config()"
+      >
+        <span language="gengduoshezhi">更多设置</span>
+      </button>
+      <!-- 按钮：用于打开系统信息模态框 -->
+      <button
+        type="button"
+        class="btn btn-info"
+        data-toggle="modal"
+        data-target="#Modal_info"
+        style="margin: 0.3% 0% 0.5% 0.3%"
+        onclick="get_info()"
+      >
+        <span language="guanyu">关于</span>
+      </button>
+
+      <!-- 固件更新模态框 -->
+      <div class="modal fade" id="Modal_updata">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <!-- 模态框头部 -->
+            <div class="modal-header">
+              <h4 class="modal-title">
+                <span language="web_gengxingujianmoshi">Web更新固件模式</span>
+                <br />
+                <small style="font-size: 1rem">
+                  <span language="zanshiwufashiyong">暂无法使用</span>
+                </small>
+              </h4>
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
+            </div>
+
+            <!-- 模态框主体 -->
+            <div class="modal-body">
+              <span id="my_updataAddress" language="huoquzhong">获取中…</span>
+            </div>
+
+            <!-- 模态框底部 -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">
+                <span id="my_updataAddress" language="guanbi">关闭</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 上传文件模态框 -->
+      <div class="modal fade" id="Modal_fileUpdata">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <!-- 模态框头部 -->
+            <div class="modal-header">
+              <h4 class="modal-title">
+                <span id="my_updataAddress">
+                  <span language="upload_file.text.0">
+                    只能上传到内部空间，上传到SD卡到文件管理
+                  </span>
+                </span>
+                <br />
+                <small style="font-size: 1rem">
+                  <span language="upload_file.text.1">
+                    请保持100kb的空闲空间
+                  </span>
+                  <br />
+                  <span language="upload_file.text.2">
+                    速度很慢，勿多次点击，等待提示消息
+                  </span>
+                </small>
+              </h4>
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
+            </div>
+
+            <!-- 模态框主体 -->
+            <div class="modal-body">
+              <input type="file" id="file_upload" />
+
+              <div class="progress" style="margin: 1% 1% 1% 1%">
+                <div
+                  id="progressNumber"
+                  class="progress-bar progress-bar-striped"
+                  style="width: 0%"
+                >
+                  <font id="percent">0%</font>
+                </div>
+              </div>
+              <span id="my_fileUpdata">
+                <!-- 文件上传成功的提示 -->
+              </span>
+            </div>
+
+            <!-- 模态框底部 -->
+            <div class="modal-footer">
+              <input
+                class="btn btn-warning"
+                type="button"
+                value="上传"
+                id="upload"
+                onclick="stopgetData2()"
+              />
+              <button type="button" class="btn btn-danger" data-dismiss="modal">
+                <span language="guanbi">关闭</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 文件管理模态框 -->
+      <div class="modal fade" id="Modal_fileManagement">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <!-- 模态框头部 -->
+            <div class="modal-header">
+              <h4 class="modal-title">
+                <span language="wenjianguanli">文件管理</span>
+              </h4>
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
+            </div>
+
+            <!-- 模态框主体 -->
+            <div class="modal-body">
+              <span id="my_fileManagement">
+                <span language="my_fileManagement.text.0">
+                  更多设置-启用SD卡，可管理SD卡
+                </span>
+                <br />
+                <span language="my_fileManagement.text.1">
+                  停用SD卡则管理内部文件
+                </span>
+                <br /><br />
+                <span language="my_fileManagement.text.2">
+                  TXT:索引文件(.i)，章节文件(.z)
+                </span>
+                <br />
+                <span language="my_fileManagement.text.3">
+                  EPUB:索引、章节和阅读记录在SD卡XTCache/EPUB内
+                </span>
+                <br /><br />
+                <span language="my_fileManagement.text.4">
+                  WiFi历史记录文件/system/wifi.config
+                </span>
+                <br />
+                <span language="my_fileManagement.text.5">
+                  可下载到本地备份起来
+                </span>
+                <br />
+              </span>
+            </div>
+
+            <!-- 模态框底部 -->
+            <div class="modal-footer">
+              <a href="/edit" class="btn btn-info" role="button">
+                <span language="jinru">进入</span>
+              </a>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">
+                <span language="guanbi">关闭</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 更多设置模态框 -->
+      <div class="modal fade" id="Modal_moreSet">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <!-- 模态框头部 -->
+            <div class="modal-header">
+              <h4 class="modal-title">
+                <span language="gengduoshezhi">更多设置</span>
+              </h4>
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
+            </div>
+
+            <!-- 模态框主体 -->
+            <div class="modal-body">
+              <div id="my_sdInit">
+                <span language="huoquzhong">获取中…</span>
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary btn-sm"
+                onclick="PR_sdInit(1)"
+              >
+                <span language="qiehuan">切换</span>
+              </button>
+              <a
+                href="#zd1"
+                class="btn btn-secondary btn-sm"
+                data-toggle="collapse"
+              >
+                <span language="shuoming">说明</span>
+              </a>
+              <div id="zd1" class="collapse">
+                <span language="gaojiwenjianguanliqikeguanliSDka"
+                  >高级文件管理器可管理SD卡</span
+                >
+                <br />
+              </div>
+              <hr />
+
+              <!--
+				<div id='my_sdCapacity'>获取中…</div><button type='submit' class='btn btn-primary btn-sm' onclick='PR_sdCapacity(1)'>切换</button>
+				<a href='#zd12' class='btn btn-secondary btn-sm' data-toggle='collapse'>说明</a>
+				<div id='zd12' class='collapse'>
+						2GB以上不建议开启<br>
+						会导致阅读器文件管理器加载慢<br>
+						会导致配网器文件管理器加载慢<br>
+						卡越大越慢计算容量越慢
+				</div><hr/>
+				-->
+
+              <form id="form_sdFrequency" target="iframe_sdFrequency">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <span language="SDkapinglv"> SD卡频率 </span>
+                    </span>
+                  </div>
+                  <div id="my_sdFrequency" style="width: 7.5em">
+                    <input
+                      language-placeholder="huoquzhong1"
+                      type="text"
+                      class="form-control"
+                      name="sdFrequency"
+                      placeholder="获取中"
+                      autocomplete="off"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  class="btn btn-primary btn-sm"
+                  onclick="tjxx_sdFrequency()"
+                >
+                  <span language="baocun">保存</span>
+                </button>
+                <a
+                  href="#sd"
+                  class="btn btn-secondary btn-sm"
+                  data-toggle="collapse"
+                >
+                  <span language="shuoming">说明</span>
+                </a>
+                <div id="sd" class="collapse">
+                  <span language="fanwei_text">范围：1-10MHz</span>
+                  <br />
+                  <span language="fanwei_text_2">
+                    频率越高读写越快，也越容易掉
+                  </span>
+                </div>
+              </form>
+              <iframe name="iframe_sdFrequency" style="display: none"></iframe>
+              <hr />
+
+              <form id="form_longPress" target="iframe_longPress">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <span language="changanchufashijian.main"
+                        >长按触发时间</span
+                      >
+                    </span>
+                  </div>
+                  <div id="my_longPress" style="width: 7.5em">
+                    <input
+                      language-placeholder="huoquzhong1"
+                      type="text"
+                      class="form-control"
+                      name="LongPress"
+                      placeholder="获取中"
+                      autocomplete="off"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  class="btn btn-primary btn-sm"
+                  onclick="tjxx_longPress()"
+                >
+                  <span language="baocun">保存</span>
+                </button>
+                <a
+                  href="#longPress"
+                  class="btn btn-secondary btn-sm"
+                  data-toggle="collapse"
+                >
+                  <span language="shuoming">说明</span>
+                </a>
+                <div id="longPress" class="collapse">
+                  <span language="changanchufashijian.shuoming.0">
+                    按键3长按触发时间，单位毫秒
+                  </span>
+                  <br />
+                  <span language="changanchufashijian.shuoming.1">
+                    范围300-5000
+                  </span>
+                </div>
+              </form>
+              <iframe name="iframe_longPress" style="display: none"></iframe>
+              <hr />
+            </div>
+
+            <!-- 模态框底部 -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">
+                <span language="guanbi">关闭</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 系统信息模态框 -->
+      <div class="modal fade" id="Modal_info">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <!-- 模态框头部 -->
+            <div class="modal-header">
+              <h4 class="modal-title">
+                <span language="shebei">设备</span>
+              </h4>
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
+            </div>
+
+            <!-- 模态框主体 -->
+            <div class="modal-body" id="my_info">
+              <span language="huoquzhong">获取中…</span>
+            </div>
+
+            <!-- 模态框底部 -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">
+                <span language="guanbi">关闭</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    $(document).ready(function() {
+      $('.collapse').on('show.bs.collapse', function(e) {
+        e.preventDefault();
+        $(this).removeClass('collapsing').addClass('show');
+      });
+      $('.collapse').on('hide.bs.collapse', function(e) {
+        e.preventDefault();
+        $(this).removeClass('show collapsing');
+      });
+    });
+
+    //吐司消息提示框
+    $("body").tooltip({
+      selector: '[data-toggle="tooltip"]',
+    });
+    function show_toast(str1, str2) {
+      $.toast({
+        title: str1,
+        content: str2,
+        type: "info",
+        delay: 2000,
+      });
+    }
+    function show_toast_noTime(str1, str2) {
+      $.toast({
+        title: str1,
+        content: str2,
+        type: "info",
+        delay: 0,
+      });
+    }
+
+    var timingGetVar2;
+    function getData1() {
+      setTimeout(function () {
+		get_language();  // 首先获取并设置语言
+        get_staNameIp(); //获取stp，仅一次
+      }, 500); 
+    }
+    function getData2() {
+      timingGetVar2 = setInterval(function () {
+        get_staNameIp();
+      }, 3000); //获取stp，循环获取
+    }
+    function stopgetData2() {
+      clearInterval(timingGetVar2); //停止获取ip
+    }
+
+    //获取文件系统剩余的内存
+    var file_sync;
+    function fileSync() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          file_sync = xhttp.responseText;
+          //document.getElementById('my_fileUpdata').innerHTML = xhttp.responseText;
+          //alert("剩余内存："+file_sync);
+        }
+      };
+      xhttp.open("GET", "/Read_fileSync", true);
+      xhttp.send();
+    }
+    function get_file_upload() {
+      //进度条清零并获取文件系统的剩余空间
+      $("#percent").html(0 + "%");
+      $("#progressNumber").css("width", "" + 0 + "%");
+      fileSync();
+    }
+
+    var file = null;
+    $(function () {
+      $("#upload").click(function () {
+        if (uploadSwitch) upload();
+      });
+
+      // console.log("321321321");
+      // // $.getJSON('./cn.json', function (data) {
+      // //   console.log('JSON文件内容：', data);
+      // //   // 处理JSON数据（例如渲染到页面）
+      // //   renderData(data);
+      // // })
+
+      // // 获取下拉框元素
+      // const language_select = document.getElementById("language_select");
+
+      // // 监听下拉框选择变化事件
+      // language_select.addEventListener("change", function () {
+      //   localStorage.setItem("language", this.value);
+      // });
+    });
+
+    var uploadSwitch = 0;
+    var input = document.getElementById("file_upload");
+    //文件域选择文件时, 执行readFile函数
+    input.addEventListener("change", readFile, false);
+    function readFile() {
+      var fileSize = this.files[0].size;
+      file = this.files[0];
+      if (fileSize > file_sync) {
+        uploadSwitch = 0;
+        wifi_xiaoxi =
+          language.shengyukongjianbuzu +
+          ":" +
+          byteConversion(fileSize) +
+          ">" +
+          byteConversion(file_sync);
+        web_message =
+          "<div class='alert alert-warning alert-dismissible fade show' style='margin:10px;' onclick='get_file_upload()'>";
+        web_message +=
+          "<button type='button' class='close' data-dismiss='alert'>&times;</button>";
+        web_message += "<strong>" + wifi_xiaoxi + "</strong></div>";
+        document.getElementById("my_fileUpdata").innerHTML = web_message;
+      } else {
+        uploadSwitch = 1;
+        wifi_xiaoxi = "允许上传,文件大小" + byteConversion(fileSize);
+        web_message =
+          "<div class='alert alert-success alert-dismissible fade show' style='margin:10px;' onclick='get_file_upload()'>";
+        web_message +=
+          "<button type='button' class='close' data-dismiss='alert'>&times;</button>";
+        web_message += "<strong>" + wifi_xiaoxi + "</strong></div>";
+        document.getElementById("my_fileUpdata").innerHTML = web_message;
+      }
+    }
+    var significantFigure = function (value, figure) {
+      var arr = (value + "").split("."); //将拿到的值转换成字符串 然后用小数点进行切割
+      arr[0] = parseFloat(arr[0]); //将切割后的数组 第一个值转换成浮点值
+      arr[1] = "0." + arr[1]; //将切割后的数组的 第二个值转换成小数点形式的字符串
+      arr[1] = parseFloat(arr[1]).toPrecision(figure); //将数组第二个值转换成浮点值 按 要求的精确位数四舍五入【注：返回值是String类型】
+      //判断处理后的数组第一个值是否有. 有判断其长度，如果长度小于不够精确位数，加0---【注 字符串拼凑】
+      arr[1] += RegExp("[.]").test(value)
+        ? arr[1].length == figure + 1
+          ? "0"
+          : ""
+        : ".00";
+      //判断处理后的arr[1]中是否有1有1 则给arr[0]加1
+      arr[0] += RegExp("^1").test(arr[1]) ? 1 : 0;
+      //将处理后的arr[0]+arr[1]拼凑回value值
+      value = arr[0] + RegExp("[.]\\d{" + figure + "}").exec(arr[1]);
+      //返回value
+      return value;
+    };
+    var byteConversion = function (size) {
+      var hs;
+      if (size >= 1073741824) {
+        hs = size / 1073741824;
+        hs = significantFigure(hs, 2) + "GB";
+      }
+      if (size >= 1048576) {
+        hs = size / 1048576;
+        hs = significantFigure(hs, 2) + "MB";
+      } else if (size >= 1024) {
+        hs = size / 1024;
+        hs = significantFigure(hs, 2) + "KB";
+      } else hs = size + "B";
+      return hs;
+    };
+    //上传文件
+    function upload() {
+      var up_xhr;
+      up_xhr = new XMLHttpRequest();
+      //监听事件
+      up_xhr.upload.addEventListener("progress", uploadProgress);
+      //发送文件和表单自定义
+      var fd = new FormData();
+      fd.append("fileName", file);
+      up_xhr.open("POST", "/FileUpdata");
+      up_xhr.send(fd);
+      up_xhr.onload = function () {
+        if (up_xhr.responseText != "") {
+          wifi_xiaoxi = up_xhr.responseText;
+          web_message =
+            "<div class='alert alert-success alert-dismissible fade show' style='margin:10px;' onclick='get_file_upload()'>";
+          web_message +=
+            "<button type='button' class='close' data-dismiss='alert'>&times;</button>";
+          web_message += "<strong>" + wifi_xiaoxi + "</strong></div>";
+          document.getElementById("my_fileUpdata").innerHTML = web_message;
+        }
+      };
+    }
+
+    function uploadProgress(evt) {
+      if (evt.lengthComputable) {
+        //evt.loaded：文件上传的大小 evt.total：文件总的大小
+        var percentComplete = Math.round((evt.loaded * 100) / evt.total);
+        //加载进度，同事显示信息示信息
+        $("#percent").html(percentComplete + "%");
+        $("#progressNumber").css("width", "" + percentComplete + "%");
+      }
+    }
+
+    //*****************************************
+
+    function tjxx_wifi() {
+      //WIFI表单提交
+      var form = document.getElementById("form_wifi");
+      // 将html表单转换为formData表单对象
+      var formData = new FormData(form);
+      // 创建ajax对象
+      var xhr = new XMLHttpRequest();
+      // 对ajax对象进行配置
+      xhr.open("POST", "/Wifi");
+      // 当发送跨域请求时，携带cookie信息
+      xhr.withCredentials = true;
+      // 发送请求并传递请求参数
+      xhr.send(formData);
+      // 监听服务器端给予的响应内容
+      xhr.onload = function () {
+        //console.log(xhr.responseText);
+        if (xhr.responseText != "") {
+          wifi_xiaoxi = xhr.responseText;
+          web_message =
+            "<div class='alert alert-success alert-dismissible fade show' style='margin:10px;'>";
+          web_message +=
+            "<button type='button' class='close' data-dismiss='alert'>&times;</button>";
+          web_message += "<strong>" + wifi_xiaoxi + "</strong></div>";
+          document.getElementById("my_wifiReturnFormInfo").innerHTML =
+            web_message;
+        }
+        //getData2();
+      };
+    }
+
+    function tjxx_sdFrequency() {
+      //SD卡表单提交
+      var form = document.getElementById("form_sdFrequency");
+      var formData = new FormData(form);
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/Put_sdFrequency");
+      xhr.withCredentials = true;
+      xhr.send(formData);
+      xhr.onload = function () {
+        console.log(xhr.responseText);
+        if (xhr.responseText != "") {
+          // show_toast("SD卡频率", xhr.responseText);
+          show_toast(language.SDkapinglv, xhr.responseText);
+          // } else show_toast("SD卡频率", "返回为空");
+        } else show_toast(language.SDkapinglv, language.fanhuiweikong);
+      };
+      setTimeout(function () {
+        get_sdFrequency();
+      }, 500);
+    }
+
+    function tjxx_longPress() {
+      //长按触发时间 表单提交
+      var form = document.getElementById("form_longPress");
+      var formData = new FormData(form);
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/webPut_longPress");
+      xhr.withCredentials = true;
+      xhr.send(formData);
+      xhr.onload = function () {
+        console.log(xhr.responseText);
+        if (xhr.responseText != "") {
+          // show_toast("长按触发时间", xhr.responseText);
+          show_toast(language.changanchufashijian.main, xhr.responseText);
+          // } else show_toast("长按触发时间", "返回为空");
+        } else
+          show_toast(language.changanchufashijian.main, language.fanhuiweikong);
+      };
+      setTimeout(function () {
+        get_longPress();
+      }, 500);
+    }
+
+    function get_updateAddress() {
+      //获取固件更新地址
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          document.getElementById("my_updataAddress").innerHTML =
+            xhttp.responseText;
+        }
+      };
+      xhttp.open("GET", "/Read_updataAddress", true);
+      xhttp.send();
+    }
+
+    function get_info() {
+      //获取系统配置信息
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          document.getElementById("my_info").innerHTML = xhttp.responseText;
+        }
+      };
+      xhttp.open("GET", "/Read_info", true);
+      xhttp.send();
+    }
+
+    function get_config() {
+      setTimeout(function () {PR_sdInit(0);}, 500); //SD卡启用/停用
+      //setTimeout(function () {PR_sdCapacity(0);}, 600); //SD卡容量启用/停用
+      setTimeout(function () {get_sdFrequency();}, 800); //SD卡频率
+      setTimeout(function () {get_longPress();}, 1200); //长按触发时间
+    }
+
+    function PR_sdInit(lx) {
+      //SD卡挂载
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          document.getElementById("my_sdInit").innerHTML = xhttp.responseText;
+        }
+      };
+      if (lx) {
+        xhttp.open("GET", "/Put_sdInit", true);
+      } else {
+        xhttp.open("GET", "/Read_sdInit", true);
+      }
+      xhttp.send();
+    }
+
+    function PR_sdCapacity(lx) {
+      //SD卡容量显示
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          document.getElementById("my_sdCapacity").innerHTML =
+            xhttp.responseText;
+        }
+      };
+      if (lx) {
+        xhttp.open("GET", "/Put_sdCapacity", true);
+      } else {
+        xhttp.open("GET", "/Read_sdCapacity", true);
+      }
+      xhttp.send();
+    }
+
+    function get_sdFrequency() 
+	{
+      //获取SD卡频率
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () 
+	  {
+        if (xhttp.readyState == 4 && xhttp.status == 200) 
+		{
+          document.getElementById("my_sdFrequency").innerHTML = xhttp.responseText;
+        }
+      };
+      xhttp.open("GET", "/Read_sdFrequency?t=" + Math.random(), true);
+      xhttp.send();
+    }
+	
+	//获取语言
+	function get_language() {
+		// 如果已经有手动选择的语言，则不再获取设备语言
+		if (localStorage.getItem('language_manual')) {
+			return;
+		}
+		
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				var deviceLanguage = xhttp.responseText.trim();
+				var supportedLanguages = ["ZH-CN", "EN", "ZH-TW", "JA"];
+				
+				if (supportedLanguages.includes(deviceLanguage)) {
+					var currentLanguage = localStorage.getItem('language');
+					
+					// 只在首次加载时设置设备语言
+					if (!currentLanguage || currentLanguage !== deviceLanguage) {
+						localStorage.setItem('language', deviceLanguage);
+						location.reload();
+					}
+				}
+			}
+		};
+		xhttp.open("GET", "/webRead_language?t=" + Math.random(), true);
+		xhttp.send();
+	}
+	
+    function get_longPress() {
+      //获取长按触发时间
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          document.getElementById("my_longPress").innerHTML =
+            xhttp.responseText;
+        }
+      };
+      xhttp.open("GET", "/webRead_longPress?t=" + Math.random(), true);
+      xhttp.send();
+    }
+
+    function manual_wifi() {
+      document.getElementById("wifi_type").innerHTML =
+        // "<label for='ssid'>WIFI名称:</label><input type='text' class='form-control' name='ssid' placeholder='请输入'>";
+        "<label for='ssid'>" +
+        language.wifi_mingcheng +
+        ":</label><input language-placeholder='huoquzhong1' type='text' class='form-control' name='ssid' placeholder='请输入'>";
+      document.getElementById("my_wifiReturnFormInfo").innerHTML = "";
+    }
+    function scan_wifi() {
+      document.getElementById("wifi_type").innerHTML =
+        // "<label for='sel1'>周边网络:</label><select class='form-control' id='sel1'><option>扫描中</option></select>";
+        "<label for='sel1'>" +
+        language.zhoubianwangluo +
+        ":</label><select class='form-control' id='sel1'><option>" +
+        language.saomiaozhong +
+        "</option></select>";
+
+      var web_message =
+        "<div class='alert alert-success alert-dismissible fade show' style='margin:10px;'>";
+      web_message +=
+        "<button type='button' class='close' data-dismiss='alert'>&times;</button>";
+      web_message +=
+        "<strong>" + language.wifi_saomiao_descriptions + "</strong></div>";
+      document.getElementById("my_wifiReturnFormInfo").innerHTML = web_message;
+
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          document.getElementById("wifi_type").innerHTML = xhttp.responseText;
+
+          web_message =
+            "<div class='alert alert-success alert-dismissible fade show' style='margin:10px;'>";
+          web_message +=
+            "<button type='button' class='close' data-dismiss='alert'>&times;</button>";
+          web_message += "<strong>" + language.saomiaowanbi + "</strong></div>";
+          document.getElementById("my_wifiReturnFormInfo").innerHTML =
+            web_message;
+        }
+      };
+      xhttp.open("GET", "/Read_scanWifi", true);
+      xhttp.send();
+    }
+    function scanWifiHistory() {
+      document.getElementById("wifi_type").innerHTML =
+        // "<label for='sel1'>周边网络:</label><select class='form-control' id='sel1'><option>加载中</option></select>";
+        "<label for='sel1'>" +
+        language.zhoubianwangluo +
+        ":</label><select class='form-control' id='sel1'><option>" +
+        language.jiazaizhong +
+        "</option></select>";
+
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          document.getElementById("wifi_type").innerHTML = xhttp.responseText;
+
+          web_message =
+            "<div class='alert alert-success alert-dismissible fade show' style='margin:10px;'>";
+          web_message +=
+            "<button type='button' class='close' data-dismiss='alert'>&times;</button>";
+          web_message += "<strong>" + language.yigengxin + "</strong></div>";
+          document.getElementById("my_wifiReturnFormInfo").innerHTML =
+            web_message;
+        }
+      };
+      xhttp.open("GET", "/Read_scanWifiHistory", true);
+      xhttp.send();
+    }
+
+    var old_xiaoxi;
+    var xiaoxi_count = 0;
+    function get_staNameIp() {
+      //获取WIFI名称和IP地址
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          document.getElementById("my_staNameIp").innerHTML =
+            xhttp.responseText;
+          if (old_xiaoxi == xhttp.responseText) {
+            xiaoxi_count++;
+            if (xiaoxi_count > 2) {
+              var str = xhttp.responseText;
+              var length = str.length;
+              var web_message;
+              //console.log(str);console.log(length);
+              if (str[length - 1] >= 0 && str[length - 1] <= 9) {
+                //判断最后一位为数字表示wifi连接成功
+                stopgetData2();
+                // show_toast_noTime("WiFi配置", "连接成功");
+                show_toast_noTime(
+                  language.wifi_peizhi,
+                  language.lianjiechenggong
+                );
+                web_message =
+                  "<div class='alert alert-success alert-dismissible fade show' style='margin:10px;'>";
+                web_message +=
+                  "<button type='button' class='close' data-dismiss='alert'>&times;</button>";
+                // web_message += "<strong>" + "WiFi连接成功" + "</strong></div>";
+                web_message +=
+                  "<strong>" +
+                  "WiFi" +
+                  language.lianjiechenggong +
+                  "</strong></div>";
+                document.getElementById("my_wifiReturnFormInfo").innerHTML =
+                  web_message;
+              } else {
+                stopgetData2();
+                // show_toast_noTime("WiFi配置", "连接失败");
+                show_toast_noTime(language.wifi_peizhi, language.lianjieshibai);
+                web_message =
+                  "<div class='alert alert-danger alert-dismissible fade show' style='margin:10px;'>";
+                web_message +=
+                  "<button type='button' class='close' data-dismiss='alert'>&times;</button>";
+                // web_message += "<strong>" + "WiFi连接失败" + "</strong></div>";
+                web_message +=
+                  "<strong>" +
+                  "WiFi" +
+                  language.lianjieshibai +
+                  "</strong></div>";
+                document.getElementById("my_wifiReturnFormInfo").innerHTML =
+                  web_message;
+                document.getElementById("my_staNameIp").innerHTML =
+                  // "WiFi连接失败";
+                  "WiFi" + language.lianjieshibai;
+              }
+            }
+          } else xiaoxi_count = 0;
+          old_xiaoxi = xhttp.responseText;
+        }
+      };
+      xhttp.open("GET", "/Read_staNameIp", true);
+      xhttp.send();
+    }
+  </script>
+</html>
